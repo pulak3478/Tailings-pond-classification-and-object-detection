@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tailings Pond Detection</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body style="background-color: greenyellow;">
+
+  <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a href="/">Home</a>
+    <a href="/pure">ObjDetModel</a>
+  </div>
+
+  <div id="main">
+    <button id="openbtn" class="openbtn" onclick="openNav()">☰</button><span class="hn">Tailings Pond Classification VGG16 </h1></span>
+  </div>
+  <div class="center" id="mydiv">
+    <form method="post" action="/prediction" enctype="multipart/form-data">
+      <h3><label for="image" style="color:#6c2d76">Upload a Leaf Image For Detection by inceptionV3:</label></h3>
+      <div class="r"><input type="file" name="img" accept=".jpg, .jpeg, .png" style="color:brown" required></div>
+      <img src="{{ image_url }}" style="height:150px;width:200px" /><br>
+      <button type="submit" class="button">Predict</button>
+    </form>
+    <h5>Prediction: {{ class_name }}</h5>
+    <p>Results: </p>
+    {% for prediction in data %}
+    <p style="font-size:15px">tailings {{ "%.2f" % (prediction[1] * 100) }}%</p>
+    <p style="font-size:15px">no_tailings {{ "%.2f" % (prediction[0] * 100) }}%</p>
+    {% endfor %}
+  </div><br>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tailings Pond Detection</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    #video-container {
+      width: 100%;
+      margin: auto;
+    }
+
+    #live-video {
+      width: 100%;
+      height: auto;
+      display: none;
+      /* Initially hide the live video */
+    }
+  </style>
+</head>
+
+<body style="background-color: green;">
+
+  <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <a href="/">Home</a>
+    <a href="/pure">ObjDetModel</a>
+  </div>
+
+  <div id="main">
+    <button id="openbtn" class="openbtn" onclick="openNav()">☰</button><span class="hn">Tailings Pond Detection Yolov8 </h1></span>
+  </div>
+
+  <div class="center" id="mydiv">
+    <form action="/predictions" method="post" enctype="multipart/form-data">
+      <h3><label for="image" style="color:#6c2d76">Upload an Image For Detection:</label></h3>
+      <div class="r"><input type="file" name="image" accept="image/*" style="color:brown" required></div>
+      {% if image_path %}
+      <img src="{{ image_url }}" style="max-width: 100%;" />
+      {% endif %}
+      <br>
+      <button type="submit" class="button">Predict</button>
+    </form>
+  </div><br>
+
+  <div class="cbot" style="text-align: center;">
+    <h3>For Live Camera Video Detection <div id="video-container">
+        <img id="live-video" src="" alt="Live Video Feed">
+      </div>
+    </h3>
+    <p><button id="start-feed" class="button" style="width:155px;">Live Detection</button>
+      <script>
+        document.getElementById("start-feed").addEventListener("click", function () {
+          document.getElementById("live-video").style.display = "block"; // Show the live video
+          this.style.display = "none"; // Hide the button
+          fetch("/live_feed").then(response => {
+            document.getElementById("live-video").src = response.url; // Set the live video source
+          });
+        });
+      </script>
+    </p>
+    <script>
+      document.getElementById("start-feed").addEventListener("click", function () {
+        window.location.href = "/live_feed_page"; // Redirect to the live feed page
+      });
+    </script>
+
+    <h3>For Detection on Saved Videos <form action="/vidpred" method="post" enctype="multipart/form-data">
+    </h3>
+    <span>
+      <input type="file" name="file" accept="video/mp4">
+      <button type="submit" class="button">Predict</button>
+    </span>
+  </div>
+
+
+  </form>
+  </div><br>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
